@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <!-- Corps de l'oie -->
+    <ellipse cx="50" cy="60" rx="30" ry="25" fill="white" stroke="#333" stroke-width="2"/>
+    
+    <!-- Casque spatial -->
+    <circle cx="75" cy="45" r="15" fill="#aaa" stroke="#333" stroke-width="2"/>
+    <circle cx="75" cy="45" r="12" fill="#66a0ff" opacity="0.5"/>
+    
+    <!-- Ailes -->
+    <path d="M30 60 Q20 40 35 35" fill="white" stroke="#333" stroke-width="2"/>
+    <path d="M70 60 Q80 40 65 35" fill="white" stroke="#333" stroke-width="2"/>
+    
+    <!-- Pattes -->
+    <path d="M45 80 L40 90 L50 90" fill="orange" stroke="#333" stroke-width="2"/>
+    <path d="M55 80 L50 90 L60 90" fill="orange" stroke="#333" stroke-width="2"/>
+    
+    <!-- Pack spatial -->
+    <rect x="35" y="45" width="20" height="25" rx="5" fill="#ccc" stroke="#333" stroke-width="2"/>
+    <circle cx="45" cy="55" r="3" fill="red"/>
+    <circle cx="45" cy="65" r="3" fill="blue"/>
+</svg>

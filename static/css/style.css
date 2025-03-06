@@ -1,0 +1,136 @@
+:root {
+    --space-blue: #1a237e;
+    --space-purple: #4a148c;
+    --star-yellow: #ffd700;
+    --cosmic-white: #ffffff;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, var(--space-blue), var(--space-purple));
+    min-height: 100vh;
+    color: var(--cosmic-white);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.home h1 {
+    text-align: center;
+    font-size: 3rem;
+    color: var(--star-yellow);
+    margin-bottom: 2rem;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.start-btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background-color: var(--star-yellow);
+    color: var(--space-blue);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: transform 0.3s;
+}
+
+.start-btn:hover {
+    transform: scale(1.1);
+}
+
+.rules {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+}
+
+.game-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.game-board {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+#gameCanvas {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    margin: 0 auto;
+    display: block;
+}
+
+.game-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.dice-btn, .new-game-btn {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.dice-btn {
+    background-color: var(--star-yellow);
+    color: var(--space-blue);
+}
+
+.new-game-btn {
+    background-color: #ff4081;
+    color: white;
+}
+
+.dice-btn:hover, .new-game-btn:hover {
+    transform: scale(1.05);
+}
+
+.game-message {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    min-height: 3rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .home h1 {
+        font-size: 2rem;
+    }
+
+    .game-board {
+        padding: 0.5rem;
+    }
+}
