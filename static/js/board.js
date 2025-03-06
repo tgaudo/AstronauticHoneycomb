@@ -84,6 +84,22 @@ class GameBoard {
         return specialSquares[number] || '#3f51b5';
     }
 
+    drawPlayerIndicator(x, y, playerNum) {
+        // Dessiner un cercle lumineux autour de la case
+        this.ctx.beginPath();
+        this.ctx.arc(x, y, this.squareSize/2 + 5, 0, 2 * Math.PI);
+        this.ctx.strokeStyle = playerNum === 1 ? '#ffd700' : '#00ffff';
+        this.ctx.lineWidth = 3;
+        this.ctx.stroke();
+
+        // Ajouter l'indicateur de joueur
+        this.ctx.fillStyle = playerNum === 1 ? '#ffd700' : '#00ffff';
+        this.ctx.font = 'bold 16px Arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'top';
+        this.ctx.fillText(`J${playerNum}`, x, y - this.squareSize/2 - 20);
+    }
+
     getCoordinatesForPosition(position) {
         const centerX = this.canvas.width / 2;
         const centerY = this.canvas.height / 2;
@@ -114,6 +130,9 @@ class GameBoard {
                 y - gooseSize/2,
                 gooseSize, 
                 gooseSize);
+
+            // Ajouter l'indicateur de joueur
+            this.drawPlayerIndicator(x, y, index + 1);
         });
     }
 
