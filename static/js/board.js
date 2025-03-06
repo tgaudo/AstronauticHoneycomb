@@ -3,51 +3,68 @@ class GameBoard {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.squares = 63;
-        this.squareSize = 60;
-        this.padding = 10;
-        
-        // Calculer les dimensions du canvas
-        this.rows = 9;
-        this.cols = 7;
-        this.canvas.width = (this.cols * this.squareSize) + (this.padding * 2);
-        this.canvas.height = (this.rows * this.squareSize) + (this.padding * 2);
-        
+        this.squareSize = 50;
+        this.padding = 20;
+
+        // Calculer les dimensions du canvas pour la spirale
+        this.canvas.width = 800;
+        this.canvas.height = 800;
+
         // Charger les images des pions
         this.player1Image = new Image();
         this.player2Image = new Image();
-        this.player1Image.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f986.svg';
-        this.player2Image.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f6f8.svg';
+        this.player1Image.src = '/static/assets/astronaut-goose.svg';
+        this.player2Image.src = '/static/assets/astronaut-goose.svg';
     }
 
     drawBoard() {
-        this.ctx.fillStyle = '#1a237e';
+        // Fond sombre pour l'espace
+        this.ctx.fillStyle = '#0a0a2a';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        let currentNumber = 1;
-        for (let row = this.rows - 1; row >= 0; row--) {
-            for (let col = row % 2 === 0 ? 0 : this.cols - 1; 
-                 row % 2 === 0 ? col < this.cols : col >= 0; 
-                 row % 2 === 0 ? col++ : col--) {
-                
-                if (currentNumber <= this.squares) {
-                    const x = col * this.squareSize + this.padding;
-                    const y = row * this.squareSize + this.padding;
+        // Dessiner quelques étoiles
+        this.drawStars();
 
-                    // Dessiner la case
-                    this.ctx.fillStyle = this.getSquareColor(currentNumber);
-                    this.ctx.fillRect(x, y, this.squareSize - 2, this.squareSize - 2);
+        // Centre de la spirale
+        const centerX = this.canvas.width / 2;
+        const centerY = this.canvas.height / 2;
 
-                    // Numéro de la case
-                    this.ctx.fillStyle = '#ffffff';
-                    this.ctx.font = '16px Arial';
-                    this.ctx.textAlign = 'center';
-                    this.ctx.fillText(currentNumber.toString(), 
-                                    x + this.squareSize/2, 
-                                    y + this.squareSize/2);
+        // Paramètres de la spirale
+        const spiralSpacing = 60;  // Espacement entre les anneaux
+        const angleStep = 0.3;     // Pas d'angle pour la spirale
 
-                    currentNumber++;
-                }
-            }
+        // Dessiner les cases en spirale
+        for (let i = 1; i <= this.squares; i++) {
+            const angle = i * angleStep;
+            const radius = spiralSpacing * angle / (2 * Math.PI);
+
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY + radius * Math.sin(angle);
+
+            // Dessiner la case
+            this.ctx.fillStyle = this.getSquareColor(i);
+            this.ctx.beginPath();
+            this.ctx.arc(x, y, this.squareSize/2, 0, 2 * Math.PI);
+            this.ctx.fill();
+
+            // Numéro de la case
+            this.ctx.fillStyle = '#ffffff';
+            this.ctx.font = '16px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(i.toString(), x, y + 6);
+        }
+    }
+
+    drawStars() {
+        for (let i = 0; i < 200; i++) {
+            const x = Math.random() * this.canvas.width;
+            const y = Math.random() * this.canvas.height;
+            const size = Math.random() * 2;
+
+            this.ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.8 + 0.2})`;
+            this.ctx.beginPath();
+            this.ctx.arc(x, y, size, 0, 2 * Math.PI);
+            this.ctx.fill();
         }
     }
 
@@ -64,39 +81,65 @@ class GameBoard {
         return specialSquares[number] || '#3f51b5';
     }
 
+    getCoordinatesForPosition(position) {
+        const centerX = this.canvas.width / 2;
+        const centerY = this.canvas.height / 2;
+        const spiralSpacing = 60;
+        const angleStep = 0.3;
+
+        const angle = position * angleStep;
+        const radius = spiralSpacing * angle / (2 * Math.PI);
+
+        return {
+            x: centerX + radius * Math.cos(angle),
+            y: centerY + radius * Math.sin(angle)
+        };
+    }
+
     drawPlayers(positions) {
         positions.forEach((pos, index) => {
             if (pos === 0) return;
 
             const {x, y} = this.getCoordinatesForPosition(pos);
             const image = index === 0 ? this.player1Image : this.player2Image;
-            
+
             this.ctx.drawImage(image, 
-                x + this.squareSize/4, 
-                y + this.squareSize/4,
-                this.squareSize/2, 
-                this.squareSize/2);
+                x - this.squareSize/3, 
+                y - this.squareSize/3,
+                this.squareSize * 2/3, 
+                this.squareSize * 2/3);
         });
-    }
-
-    getCoordinatesForPosition(position) {
-        const row = Math.floor((position - 1) / this.cols);
-        let col;
-        
-        if (row % 2 === 0) {
-            col = (position - 1) % this.cols;
-        } else {
-            col = this.cols - 1 - ((position - 1) % this.cols);
-        }
-
-        return {
-            x: col * this.squareSize + this.padding,
-            y: (this.rows - 1 - row) * this.squareSize + this.padding
-        };
     }
 
     update(positions) {
         this.drawBoard();
         this.drawPlayers(positions);
+    }
+
+    async playVictoryAnimation(winnerPosition) {
+        const {x, y} = this.getCoordinatesForPosition(winnerPosition);
+        const startY = y;
+        const duration = 2000;
+        const startTime = Date.now();
+
+        const animate = () => {
+            const currentTime = Date.now();
+            const progress = (currentTime - startTime) / duration;
+
+            if (progress < 1) {
+                this.drawBoard();
+                // Dessiner le gagnant qui s'envole
+                const currentY = startY - (progress * this.canvas.height);
+                this.ctx.drawImage(this.player1Image,
+                    x - this.squareSize/3,
+                    currentY - this.squareSize/3,
+                    this.squareSize * 2/3,
+                    this.squareSize * 2/3
+                );
+                requestAnimationFrame(animate);
+            }
+        };
+
+        animate();
     }
 }

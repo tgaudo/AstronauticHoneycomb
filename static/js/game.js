@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     rollButton.addEventListener('click', async () => {
         rollButton.disabled = true;
-        
+
         try {
             const response = await fetch('/roll_dice', {
                 method: 'POST',
@@ -21,24 +21,26 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const data = await response.json();
-            
+
             // Afficher le résultat du dé
             diceResult.textContent = `Dé: ${data.roll}`;
-            
+
             // Mettre à jour le message
             gameMessage.textContent = data.message;
-            
+
             // Mettre à jour le joueur actuel
             currentPlayerDisplay.textContent = data.currentPlayer + 1;
-            
+
             // Mettre à jour le plateau
             gameBoard.update(data.positions);
 
             if (data.gameOver) {
                 rollButton.disabled = true;
+                // Lancer l'animation de victoire
+                await gameBoard.playVictoryAnimation(data.positions[data.currentPlayer]);
                 setTimeout(() => {
                     alert("Partie terminée! " + data.message);
-                }, 500);
+                }, 2500);
             } else {
                 rollButton.disabled = false;
             }
@@ -54,13 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
             await fetch('/new_game', {
                 method: 'POST'
             });
-            
+
             // Réinitialiser l'interface
             diceResult.textContent = '';
             gameMessage.textContent = '';
             currentPlayerDisplay.textContent = '1';
             rollButton.disabled = false;
-            
+
             // Redessiner le plateau
             gameBoard.update([0, 0]);
         } catch (error) {
