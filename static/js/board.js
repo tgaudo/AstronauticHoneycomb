@@ -30,8 +30,8 @@ class GameBoard {
         const centerY = this.canvas.height / 2;
 
         // Paramètres de la spirale
-        const spiralSpacing = 80;  // Augmentation de l'espacement entre les anneaux
-        const angleStep = 0.35;    // Augmentation du pas d'angle pour étaler la spirale
+        const spiralSpacing = 120;  // Augmentation significative de l'espacement entre les anneaux
+        const angleStep = 0.4;     // Augmentation du pas d'angle pour étaler davantage la spirale
 
         // Dessiner les cases en spirale
         for (let i = 1; i <= this.squares; i++) {
@@ -85,8 +85,8 @@ class GameBoard {
     getCoordinatesForPosition(position) {
         const centerX = this.canvas.width / 2;
         const centerY = this.canvas.height / 2;
-        const spiralSpacing = 80;  // Mise à jour de l'espacement
-        const angleStep = 0.35;    // Mise à jour du pas d'angle
+        const spiralSpacing = 120;  // Mise à jour de l'espacement
+        const angleStep = 0.4;     // Mise à jour du pas d'angle
 
         const angle = position * angleStep;
         const radius = spiralSpacing * angle / (2 * Math.PI);
@@ -104,11 +104,13 @@ class GameBoard {
             const {x, y} = this.getCoordinatesForPosition(pos);
             const image = index === 0 ? this.player1Image : this.player2Image;
 
+            // Augmentation de la taille des oies
+            const gooseSize = this.squareSize * 1.2; // 20% plus grand que la case
             this.ctx.drawImage(image, 
-                x - this.squareSize/3, 
-                y - this.squareSize/3,
-                this.squareSize * 2/3, 
-                this.squareSize * 2/3);
+                x - gooseSize/2, 
+                y - gooseSize/2,
+                gooseSize, 
+                gooseSize);
         });
     }
 
@@ -129,13 +131,14 @@ class GameBoard {
 
             if (progress < 1) {
                 this.drawBoard();
-                // Dessiner le gagnant qui s'envole
+                // Dessiner le gagnant qui s'envole avec une taille plus grande
+                const gooseSize = this.squareSize * 1.2;
                 const currentY = startY - (progress * this.canvas.height);
                 this.ctx.drawImage(this.player1Image,
-                    x - this.squareSize/3,
-                    currentY - this.squareSize/3,
-                    this.squareSize * 2/3,
-                    this.squareSize * 2/3
+                    x - gooseSize/2,
+                    currentY - gooseSize/2,
+                    gooseSize,
+                    gooseSize
                 );
                 requestAnimationFrame(animate);
             }
