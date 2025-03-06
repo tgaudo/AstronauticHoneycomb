@@ -30,14 +30,16 @@ class GameBoard {
         const centerY = this.canvas.height / 2;
 
         // Paramètres de la spirale
-        const spiralSpacing = 120;  // Augmentation significative de l'espacement entre les anneaux
-        const angleStep = 0.4;     // Augmentation du pas d'angle pour étaler davantage la spirale
+        const maxRadius = Math.min(this.canvas.width, this.canvas.height) / 2 - this.squareSize;
+        const spiralSpacing = maxRadius / Math.sqrt(this.squares);  // Calcul dynamique de l'espacement
+        const angleStep = 2 * Math.PI / Math.sqrt(this.squares);    // Pas d'angle adaptatif
 
         // Dessiner les cases en spirale
         for (let i = 1; i <= this.squares; i++) {
             const angle = i * angleStep;
-            const radius = spiralSpacing * angle / (2 * Math.PI);
+            const radius = spiralSpacing * Math.sqrt(i);
 
+            // Assurer que la case reste dans les limites
             const x = centerX + radius * Math.cos(angle);
             const y = centerY + radius * Math.sin(angle);
 
@@ -85,11 +87,12 @@ class GameBoard {
     getCoordinatesForPosition(position) {
         const centerX = this.canvas.width / 2;
         const centerY = this.canvas.height / 2;
-        const spiralSpacing = 120;  // Mise à jour de l'espacement
-        const angleStep = 0.4;     // Mise à jour du pas d'angle
+        const maxRadius = Math.min(this.canvas.width, this.canvas.height) / 2 - this.squareSize;
+        const spiralSpacing = maxRadius / Math.sqrt(this.squares);
+        const angleStep = 2 * Math.PI / Math.sqrt(this.squares);
 
         const angle = position * angleStep;
-        const radius = spiralSpacing * angle / (2 * Math.PI);
+        const radius = spiralSpacing * Math.sqrt(position);
 
         return {
             x: centerX + radius * Math.cos(angle),
