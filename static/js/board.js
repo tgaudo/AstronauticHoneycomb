@@ -3,7 +3,7 @@ class GameBoard {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.squares = 63;
-        this.squareSize = 60;  // Augmentation de la taille des cases
+        this.squareSize = 60;  // Taille des cases
         this.padding = 20;
 
         // Calculer les dimensions du canvas pour la spirale
@@ -30,8 +30,8 @@ class GameBoard {
         const centerY = this.canvas.height / 2;
 
         // Paramètres de la spirale
-        const spiralSpacing = 45;  // Réduction de l'espacement entre les anneaux
-        const angleStep = 0.25;    // Réduction du pas d'angle pour resserrer la spirale
+        const spiralSpacing = 80;  // Augmentation de l'espacement entre les anneaux
+        const angleStep = 0.35;    // Augmentation du pas d'angle pour étaler la spirale
 
         // Dessiner les cases en spirale
         for (let i = 1; i <= this.squares; i++) {
@@ -49,9 +49,9 @@ class GameBoard {
 
             // Numéro de la case
             this.ctx.fillStyle = '#ffffff';
-            this.ctx.font = 'bold 20px Arial';  // Police plus grande et en gras
+            this.ctx.font = 'bold 24px Arial';  // Police plus grande
             this.ctx.textAlign = 'center';
-            this.ctx.textBaseline = 'middle';   // Centrage vertical du texte
+            this.ctx.textBaseline = 'middle';
             this.ctx.fillText(i.toString(), x, y);
         }
     }
@@ -85,8 +85,8 @@ class GameBoard {
     getCoordinatesForPosition(position) {
         const centerX = this.canvas.width / 2;
         const centerY = this.canvas.height / 2;
-        const spiralSpacing = 45;  // Mise à jour de l'espacement pour correspondre au drawBoard
-        const angleStep = 0.25;    // Mise à jour du pas d'angle pour correspondre au drawBoard
+        const spiralSpacing = 80;  // Mise à jour de l'espacement
+        const angleStep = 0.35;    // Mise à jour du pas d'angle
 
         const angle = position * angleStep;
         const radius = spiralSpacing * angle / (2 * Math.PI);
