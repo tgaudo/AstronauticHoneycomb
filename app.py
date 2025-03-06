@@ -17,12 +17,22 @@ def game():
 @app.route('/roll_dice', methods=['POST'])
 def roll_dice():
     if 'game_state' not in session:
-        session['game_state'] = GameState()
-    
-    game_state = session['game_state']
+        # Initialiser un nouvel état de jeu dans la session
+        session['game_state'] = {
+            'positions': [0, 0],
+            'current_player': 0
+        }
+
+    # Créer une instance de GameState avec les données de la session
+    game_state = GameState.from_dict(session['game_state'])
+
+    # Lancer le dé et traiter le tour
     roll = random.randint(1, 6)
     result = game_state.process_turn(roll)
-    
+
+    # Mettre à jour l'état dans la session
+    session['game_state'] = game_state.to_dict()
+
     return jsonify({
         'roll': roll,
         'currentPlayer': game_state.current_player,
@@ -33,7 +43,11 @@ def roll_dice():
 
 @app.route('/new_game', methods=['POST'])
 def new_game():
-    session['game_state'] = GameState()
+    # Réinitialiser l'état du jeu dans la session
+    session['game_state'] = {
+        'positions': [0, 0],
+        'current_player': 0
+    }
     return jsonify({'status': 'success'})
 
 if __name__ == '__main__':

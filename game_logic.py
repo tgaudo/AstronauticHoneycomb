@@ -3,7 +3,7 @@ class GameState:
         self.positions = [0, 0]  # Position des deux joueurs
         self.current_player = 0
         self.board_size = 63
-        
+
         # Définition des cases spéciales
         self.special_squares = {
             6: ("Découverte d'une nouvelle galaxie! Avance de 6 cases", 12),
@@ -11,6 +11,21 @@ class GameState:
             31: ("Station spatiale! Attend qu'un autre joueur arrive", None),
             42: ("Pluie de météorites! Recule de 6 cases", 36),
             58: ("Propulsion ionique! Avance de 4 cases", 62)
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        """Crée une instance de GameState à partir d'un dictionnaire"""
+        instance = cls()
+        instance.positions = data['positions']
+        instance.current_player = data['current_player']
+        return instance
+
+    def to_dict(self):
+        """Convertit l'état du jeu en dictionnaire"""
+        return {
+            'positions': self.positions,
+            'current_player': self.current_player
         }
 
     def process_turn(self, roll):
