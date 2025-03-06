@@ -31,17 +31,21 @@ class GameBoard {
 
         // Paramètres de la spirale
         const maxRadius = Math.min(this.canvas.width, this.canvas.height) / 2 - this.squareSize;
-        const spiralSpacing = maxRadius / Math.sqrt(this.squares);  // Calcul dynamique de l'espacement
-        const angleStep = 2 * Math.PI / Math.sqrt(this.squares);    // Pas d'angle adaptatif
+        const spiralSpacing = maxRadius / Math.sqrt(this.squares);
+        const angleStep = 2 * Math.PI / Math.sqrt(this.squares);
 
-        // Dessiner les cases en spirale
+        // Dessiner les cases en spirale avec quinconce
         for (let i = 1; i <= this.squares; i++) {
             const angle = i * angleStep;
             const radius = spiralSpacing * Math.sqrt(i);
 
-            // Assurer que la case reste dans les limites
-            const x = centerX + radius * Math.cos(angle);
-            const y = centerY + radius * Math.sin(angle);
+            // Ajouter un décalage en quinconce
+            const offset = (i % 2) * (this.squareSize / 2);
+            const offsetAngle = offset / radius;
+
+            // Calculer la position avec le décalage
+            const x = centerX + radius * Math.cos(angle + offsetAngle);
+            const y = centerY + radius * Math.sin(angle + offsetAngle);
 
             // Dessiner la case
             this.ctx.fillStyle = this.getSquareColor(i);
@@ -71,19 +75,6 @@ class GameBoard {
         }
     }
 
-    getSquareColor(number) {
-        // Cases spéciales
-        const specialSquares = {
-            6: '#4CAF50',    // Découverte galaxie
-            19: '#F44336',   // Trou noir
-            31: '#2196F3',   // Station spatiale
-            42: '#FF9800',   // Météorites
-            58: '#9C27B0'    // Propulsion
-        };
-
-        return specialSquares[number] || '#3f51b5';
-    }
-
     drawPlayerIndicator(x, y, playerNum) {
         // Dessiner un cercle lumineux autour de la case
         this.ctx.beginPath();
@@ -100,6 +91,19 @@ class GameBoard {
         this.ctx.fillText(`J${playerNum}`, x, y - this.squareSize/2 - 20);
     }
 
+    getSquareColor(number) {
+        // Cases spéciales
+        const specialSquares = {
+            6: '#4CAF50',    // Découverte galaxie
+            19: '#F44336',   // Trou noir
+            31: '#2196F3',   // Station spatiale
+            42: '#FF9800',   // Météorites
+            58: '#9C27B0'    // Propulsion
+        };
+
+        return specialSquares[number] || '#3f51b5';
+    }
+
     getCoordinatesForPosition(position) {
         const centerX = this.canvas.width / 2;
         const centerY = this.canvas.height / 2;
@@ -110,9 +114,13 @@ class GameBoard {
         const angle = position * angleStep;
         const radius = spiralSpacing * Math.sqrt(position);
 
+        // Ajouter le même décalage en quinconce que dans drawBoard
+        const offset = (position % 2) * (this.squareSize / 2);
+        const offsetAngle = offset / radius;
+
         return {
-            x: centerX + radius * Math.cos(angle),
-            y: centerY + radius * Math.sin(angle)
+            x: centerX + radius * Math.cos(angle + offsetAngle),
+            y: centerY + radius * Math.sin(angle + offsetAngle)
         };
     }
 
